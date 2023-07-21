@@ -1,7 +1,8 @@
 version: '3'
 services:
   kafka1:
-    image: confluentinc/cp-kafka
+    build:
+      dockerfile: kafka-broker-dockerfile
     container_name: kafka1
     hostname: kafka1
     ports:
