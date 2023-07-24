@@ -1,2 +1,7 @@
 FROM confluentinc/cp-kafka
-COPY data_gen_and_load.py /
+COPY data_gen_and_load.py /home/appuser/
+
+USER root
+RUN chown appuser:0 /home/appuser/data_gen_and_load.py && \
+chmod 775 /home/appuser/data_gen_and_load.py
+USER appuser

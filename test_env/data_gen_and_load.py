@@ -12,9 +12,9 @@ def start_producing():
     # now we spin up process calling producer script and pushing messages
 
     with subprocess.Popen(
-            f'kafka-console-producer.sh --bootstrap-server localhost:{bootstrap_port} --topic {hostname}.test.data',
-            stdin=subprocess.PIPE) as producer_process:
-        with open('messages.txt') as msg_file:
+            f'/usr/bin/kafka-console-producer --bootstrap-server localhost:{bootstrap_port} --topic {hostname}.test.data',
+            shell=True, stdin=subprocess.PIPE) as producer_process:
+        with open('.bashrc') as msg_file:
             line = msg_file.readline()
             producer_process.stdin.write(line)
             print(f'Producer sent message:{line}')
@@ -23,8 +23,8 @@ def start_producing():
 # we spin up consumer for topic to consume
 def start_consuming(consumer_name):
     with subprocess.Popen(
-            f'kafka-console-consumer.sh --bootstrap-server localhost:{bootstrap_port} --topic {hostname}.test.data',
-            stdout=subprocess.PIPE) as consumer_process:
+            f'/usr/bin/kafka-console-consumer --bootstrap-server localhost:{bootstrap_port} --topic {hostname}.test.data',
+            shell=True, stdout=subprocess.PIPE) as consumer_process:
         for line in consumer_process.stdout:
             print(f'Consumer Named:{consumer_name} received:{line}')
 
