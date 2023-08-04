@@ -1,0 +1,15 @@
+FROM --platform=linux/amd64 appdynamics/machine-agent:latest
+
+LABEL name="AppDynamics MachineAgent Kafka Extension"
+
+#COPY kafka-1.0.0.zip /tmp
+#RUN unzip -oq /tmp/MqttMonitor-1.0.0.zip -d /opt/appdynamics/monitors/
+COPY controller-info.xml /opt/appdynamics/conf/
+#COPY config.yml /opt/appdynamics/monitors/MqttMonitor/
+COPY log4j.xml /opt/appdynamics/conf/logging/
+
+#need to run to make sure all the unzipped and copied files have same perms/user/group
+USER root
+RUN chown -R appdynamics:0 /opt/appdynamics && \
+chmod -R 774 /opt/appdynamics
+USER appdynamics

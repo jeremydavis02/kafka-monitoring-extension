@@ -1,5 +1,12 @@
 version: '3'
 services:
+  appd_machine:
+    build:
+      dockerfile: machine_with_extension/machine-Dockerfile
+    container_name: machine_agent
+    hostname: machine_agent
+    #shouldn't need any env variables for this since controller info
+
   kafka1:
     build:
       dockerfile: kafka-broker-dockerfile
