@@ -12,7 +12,7 @@ services:
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT'
       KAFKA_LISTENERS: 'INTERNAL://kafka1:29092,CONTROLLER://kafka1:29093,EXTERNAL://0.0.0.0:9092'
-      KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafka1:29092,EXTERNAL://localhost:9092'
+      KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafka1:29092,EXTERNAL://host.docker.internal:9092'
       KAFKA_INTER_BROKER_LISTENER_NAME: 'INTERNAL'
       KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:29093,2@kafka2:29093,3@kafka3:29093'
       KAFKA_PROCESS_ROLES: 'broker,controller'
@@ -22,9 +22,20 @@ services:
       CLUSTER_ID: 'ciWo7IWazngRchmPES6q5A=='
       KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
       BOOTSTRAP_PORT: '9092'
+      APPDYNAMICS_AGENT_APPLICATION_NAME: 'JSD_KafkaCluster_Test'
+      APPDYNAMICS_AGENT_TIER_NAME: 'KafkaBrokers'
+      APPDYNAMICS_AGENT_ACCOUNT_NAME: 'mcafee-prod'
+      APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY: 'd780533b-f7d7-4c97-bc16-d086329395c1'
+      APPDYNAMICS_CONTROLLER_HOST_NAME: 'mcafee-prod.saas.appdynamics.com'
+      APPDYNAMICS_CONTROLLER_PORT: '443'
+      APPDYNAMICS_CONTROLLER_SSL_ENABLED: 'true'
+      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME: 'true'
+      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME_PREFIX: 'test'
+      KAFKA_OPTS: '-javaagent:/opt/appdynamics/javaagent.jar'
 
   kafka2:
-    image: confluentinc/cp-kafka
+    build:
+      dockerfile: kafka-broker-dockerfile
     container_name: kafka2
     hostname: kafka2
     ports:
@@ -34,7 +45,7 @@ services:
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT'
       KAFKA_LISTENERS: 'INTERNAL://kafka2:29092,CONTROLLER://kafka2:29093,EXTERNAL://0.0.0.0:9093'
-      KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafka2:29092,EXTERNAL://localhost:9093'
+      KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafka2:29092,EXTERNAL://host.docker.internal:9093'
       KAFKA_INTER_BROKER_LISTENER_NAME: 'INTERNAL'
       KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:29093,2@kafka2:29093,3@kafka3:29093'
       KAFKA_PROCESS_ROLES: 'broker,controller'
@@ -43,9 +54,11 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
       CLUSTER_ID: 'ciWo7IWazngRchmPES6q5A=='
       KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+      BOOTSTRAP_PORT: '9093'
 
   kafka3:
-    image: confluentinc/cp-kafka
+    build:
+      dockerfile: kafka-broker-dockerfile
     container_name: kafka3
     hostname: kafka3
     ports:
@@ -55,7 +68,7 @@ services:
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT'
       KAFKA_LISTENERS: 'INTERNAL://kafka3:29092,CONTROLLER://kafka3:29093,EXTERNAL://0.0.0.0:9094'
-      KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafka3:29092,EXTERNAL://localhost:9094'
+      KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafka3:29092,EXTERNAL://host.docker.internal:9094'
       KAFKA_INTER_BROKER_LISTENER_NAME: 'INTERNAL'
       KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:29093,2@kafka2:29093,3@kafka3:29093'
       KAFKA_PROCESS_ROLES: 'broker,controller'
@@ -64,6 +77,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
       CLUSTER_ID: 'ciWo7IWazngRchmPES6q5A=='
       KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+      BOOTSTRAP_PORT: '9094'
 
   schema-registry:
     image: confluentinc/cp-schema-registry

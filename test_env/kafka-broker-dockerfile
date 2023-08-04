@@ -1,7 +1,17 @@
 FROM confluentinc/cp-kafka
 COPY data_gen_and_load.py /home/appuser/
+COPY test_text.txt /home/appuser/
 
 USER root
+RUN yum install unzip -y
+RUN mkdir -p /opt/appdynamics/
+COPY JavaAppServerAgent.zip /tmp
+RUN unzip -oq /tmp/JavaAppServerAgent.zip -d /opt/appdynamics/
+
+
 RUN chown appuser:0 /home/appuser/data_gen_and_load.py && \
 chmod 775 /home/appuser/data_gen_and_load.py
+RUN chown -R appuser:0 /opt/appdynamics && \
+chmod -R 774 /opt/appdynamics
+
 USER appuser
