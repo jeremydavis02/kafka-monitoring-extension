@@ -2,10 +2,15 @@ version: '3'
 services:
   appd_machine:
     build:
+      context: .
       dockerfile: machine_with_extension/machine-Dockerfile
     container_name: machine_agent
     hostname: machine_agent
+
     #shouldn't need any env variables for this since controller info
+    #volumes:
+      #- /:/hostroot:ro
+      #- /var/run/docker.sock:/var/run/docker.sock
 
   kafka1:
     build:
@@ -14,6 +19,7 @@ services:
     hostname: kafka1
     ports:
       - "9092:9092"
+      - "9099:9099"
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
@@ -29,16 +35,18 @@ services:
       CLUSTER_ID: 'ciWo7IWazngRchmPES6q5A=='
       KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
       BOOTSTRAP_PORT: '9092'
-      APPDYNAMICS_AGENT_APPLICATION_NAME: 'JSD_KafkaCluster_Test'
+      APPDYNAMICS_AGENT_APPLICATION_NAME: 'BGD_KafkaCluster_Test'
       APPDYNAMICS_AGENT_TIER_NAME: 'KafkaBrokers'
-      APPDYNAMICS_AGENT_ACCOUNT_NAME: 'mcafee-prod'
-      APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY: 'd780533b-f7d7-4c97-bc16-d086329395c1'
-      APPDYNAMICS_CONTROLLER_HOST_NAME: 'mcafee-prod.saas.appdynamics.com'
+      APPDYNAMICS_AGENT_ACCOUNT_NAME: 'amer-ps-sandbox'
+      APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY: 'ii7d3di3aco5'
+      APPDYNAMICS_CONTROLLER_HOST_NAME: 'amer-ps-sandbox.saas.appdynamics.com'
       APPDYNAMICS_CONTROLLER_PORT: '443'
       APPDYNAMICS_CONTROLLER_SSL_ENABLED: 'true'
       APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME: 'true'
-      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME_PREFIX: 'test'
+      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME_PREFIX: 'KafkaNode'
       KAFKA_OPTS: '-javaagent:/opt/appdynamics/javaagent.jar'
+      KAFKA_JMX_PORT: '9099'
+      KAFKA_JMX_HOSTNAME: 'kafka1'
 
   kafka2:
     build:
@@ -62,6 +70,16 @@ services:
       CLUSTER_ID: 'ciWo7IWazngRchmPES6q5A=='
       KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
       BOOTSTRAP_PORT: '9093'
+      APPDYNAMICS_AGENT_APPLICATION_NAME: 'BGD_KafkaCluster_Test'
+      APPDYNAMICS_AGENT_TIER_NAME: 'KafkaBrokers'
+      APPDYNAMICS_AGENT_ACCOUNT_NAME: 'amer-ps-sandbox'
+      APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY: 'ii7d3di3aco5'
+      APPDYNAMICS_CONTROLLER_HOST_NAME: 'amer-ps-sandbox.saas.appdynamics.com'
+      APPDYNAMICS_CONTROLLER_PORT: '443'
+      APPDYNAMICS_CONTROLLER_SSL_ENABLED: 'true'
+      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME: 'true'
+      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME_PREFIX: 'KafkaNode'
+      KAFKA_OPTS: '-javaagent:/opt/appdynamics/javaagent.jar'
 
   kafka3:
     build:
@@ -85,6 +103,16 @@ services:
       CLUSTER_ID: 'ciWo7IWazngRchmPES6q5A=='
       KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
       BOOTSTRAP_PORT: '9094'
+      APPDYNAMICS_AGENT_APPLICATION_NAME: 'BGD_KafkaCluster_Test'
+      APPDYNAMICS_AGENT_TIER_NAME: 'KafkaBrokers'
+      APPDYNAMICS_AGENT_ACCOUNT_NAME: 'amer-ps-sandbox'
+      APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY: 'ii7d3di3aco5'
+      APPDYNAMICS_CONTROLLER_HOST_NAME: 'amer-ps-sandbox.saas.appdynamics.com'
+      APPDYNAMICS_CONTROLLER_PORT: '443'
+      APPDYNAMICS_CONTROLLER_SSL_ENABLED: 'true'
+      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME: 'true'
+      APPDYNAMICS_JAVA_AGENT_REUSE_NODE_NAME_PREFIX: 'KafkaNode'
+      KAFKA_OPTS: '-javaagent:/opt/appdynamics/javaagent.jar'
 
   schema-registry:
     image: confluentinc/cp-schema-registry

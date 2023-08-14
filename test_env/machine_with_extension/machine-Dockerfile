@@ -2,11 +2,13 @@ FROM --platform=linux/amd64 appdynamics/machine-agent:latest
 
 LABEL name="AppDynamics MachineAgent Kafka Extension"
 
-#COPY ../../target/KafkaMonitor-2.0.5.zip /tmp
-#RUN unzip -oq /tmp/KafkaMonitor-2.0.5.zip -d /opt/appdynamics/monitors/
+COPY KafkaMonitor-2.0.5.zip /tmp
+RUN unzip -oq /tmp/KafkaMonitor-2.0.5.zip -d /opt/appdynamics/monitors/
+ENV APPDYNAMICS_HOME /opt/appdynamics
 COPY controller-info.xml /opt/appdynamics/conf/
-#totally differen config.yml and folder for below
-#COPY config.yml /opt/appdynamics/monitors/MqttMonitor/
+#totally different config.yml and folder for below
+COPY ./ConfigKafka.yml /opt/appdynamics/monitors/KafkaMonitor/config.yml
+COPY ./ConfigKafka.yml /opt/appdynamics/conf
 COPY log4j.xml /opt/appdynamics/conf/logging/
 
 #need to run to make sure all the unzipped and copied files have same perms/user/group
